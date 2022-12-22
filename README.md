@@ -11,5 +11,7 @@
  - build with `mvn clean install`
    - running application: `mvn spring-boot:run -Dspring-boot.run.profiles=default` 
    - testing application: `mvn spring-boot:run -Dspring-boot.run.profiles=dummy`
+ - access H2 console `http://localhost:8085/h2-console/` user:`sa`, password:`admin`
+ - access 
 
  

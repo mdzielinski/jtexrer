@@ -9,12 +9,10 @@ import mdse.jtexrer.fetching.DataFetcher;
 import mdse.jtexrer.model.exchange.ExchangeResponseBody;
 import mdse.jtexrer.service.ExchangeEvaluator;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+
 
 @RestController
 @AllArgsConstructor
