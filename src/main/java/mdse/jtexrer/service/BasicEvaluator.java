@@ -33,6 +33,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
     private ExchangeRecordRepository recordRepository;
 
     @Override
+    @Synchronized
     public BigDecimal evaluateExchange(String fromCode, String toCode, LocalDate date) {
         var metadata = getForAppropriateDate(date);
         log.info("Retrieving buffered exchange data from {} to {} with base currency {} for date {}",
@@ -58,7 +59,6 @@ public class BasicEvaluator implements ExchangeEvaluator {
         return rates;
     }
 
-    @Synchronized
     private List<ExchangeRecord> getBufferedRatesAndIterateReads(String codeFrom, String codeTo, LocalDate date) {
         var fromId = compositeIdOf(codeFrom, date);
         var toId = compositeIdOf(codeTo, date);
