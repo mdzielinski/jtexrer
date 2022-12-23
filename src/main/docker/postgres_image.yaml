@@ -1,0 +1,14 @@
+version: "3.0"
+services:
+  database:
+    image: library/postgres:latest
+    volumes:
+      ./db
+    ports:
+      - 5454:5432
+    expose:
+      - 5454
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=sa
+      - POSTGRES_DB=jtexer

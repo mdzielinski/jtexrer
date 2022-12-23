@@ -8,8 +8,6 @@ import mdse.jtexrer.fetching.client.RestClient;
 import mdse.jtexrer.model.exchange.ExchangeRateAsFetched;
 import mdse.jtexrer.model.repository.ExchangeBulkDataRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import static mdse.jtexrer.model.exchange.util.ExchangeRateDeserializeUtil.deserialize;
@@ -17,22 +15,16 @@ import static mdse.jtexrer.model.exchange.util.ExchangeRateDeserializeUtil.deser
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ScheduledAsyncFetcher implements DataFetcher {
+public class ExchangeFetcher implements DataFetcher {
     private final ExchangeBulkDataRepository exchangeBulkDataRepository;
     private final RestClient client;
+
     @Value("${exchange_api_url}")
     private String API_URL;
     @Value("${exchange_api_key_name}")
     private String API_KEY_NAME;
     @Value("${exchange_api_key_value}")
     private String API_KEY_VALUE;
-
-    @Async
-    @Scheduled(cron = "${schedule}", zone = "GMT")
-    public void asyncFetch() {
-        log.info("Starting scheduled fetch task.");
-        fetchExchangeData();
-    }
 
     @Override
     @Synchronized
