@@ -11,4 +11,4 @@ services:
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=sa
-      - POSTGRES_DB=jtexer
+      - POSTGRES_DB=jtexrer

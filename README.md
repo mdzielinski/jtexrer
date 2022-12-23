@@ -12,11 +12,13 @@
 - clone application
 - build with `mvn clean install`
     - running application as requested (
-      prod): `mvn spring-boot:run -Dspring-boot.run.profiles=online,5pastmidnight,standardspread,h2`
+      prod): `mvn spring-boot:run -Dspring-boot.run.profiles=online,5pastmidnight,standardspread,h2InMemory`
     - testing application in offline test
       mode: `mvn spring-boot:run -Dspring-boot.run.profiles=offline,every1min,standardspread,h2`
 - additional profiles:
     - `zerospread` - all currencies exchange has 0% spread strategy (to be used instead of `standardspread`).
+    - `postgresInDocker` - connects to database in container, defined in [postgres_image.yaml](./src/main/docker/postgres_image.yaml)
+
 
 ### additional useful links
 
