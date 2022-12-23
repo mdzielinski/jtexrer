@@ -1,4 +1,4 @@
-# Jelly Tech Exchange Rates buffer by Mateusz Dzieliński
+# Exchange Rates buffer by Mateusz Dzieliński
 
 ## how to start using calculator within test-app?
 
