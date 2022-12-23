@@ -27,7 +27,7 @@ public class ScheduledAsyncFetcher implements DataFetcher {
     private String API_KEY_VALUE;
 
     @Async
-    @Scheduled(cron = "${cron_every_1_minute}", zone = "GMT")
+    @Scheduled(cron = "${schedule}", zone = "GMT")
     public void asyncFetch() {
         log.info("Starting scheduled fetch task.");
         fetchExchangeData();

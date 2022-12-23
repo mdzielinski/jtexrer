@@ -1,8 +1,9 @@
 package mdse.jtexrer.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface ExchangeEvaluator {
 
-  Double evaluateExchange(String from, String to, LocalDate date);
+  BigDecimal evaluateExchange(String from, String to, LocalDate date);
 }

@@ -16,15 +16,9 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(value = {IncorrectDateException.class, IncorrectCurrencyCodeException.class, ConstraintViolationException.class})
+    @ExceptionHandler(value = {IncorrectDateException.class, IncorrectCurrencyCodeException.class, ConstraintViolationException.class,})
     public ResponseEntity<String> handleIncorrectParameters(Exception e) {
         log.warn("Bad request parameters, responding with {}.", NOT_FOUND, e.getCause());
         return new ResponseEntity<>("Incorrect request parameters: " + getRootCause(e).getMessage(), NOT_FOUND);
-    }
-
-    @ExceptionHandler(value = {RuntimeException.class})
-    public ResponseEntity<String> handleRuntimeExceptions(RuntimeException e) {
-        log.error("Unexpected exception! cause: ", e.getCause());
-        return new ResponseEntity<>("Something went wrong", BAD_REQUEST);
     }
 }

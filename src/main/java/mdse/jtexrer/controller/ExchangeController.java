@@ -23,7 +23,6 @@ public class ExchangeController {
     private ExchangeEvaluator calculator;
     private DataFetcher dataFetcher;
 
-    @Synchronized
     @Transactional
     @GetMapping("/exchange/")
     public ExchangeResponseBody getExchangeRate(@RequestParam @Pattern(regexp = "^[a-zA-Z]{3}$") String from,

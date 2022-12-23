@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @Service
-@Profile("default")
+@Profile({"default", "online"})
 @AllArgsConstructor
 public class ExchangeClient implements RestClient {
 

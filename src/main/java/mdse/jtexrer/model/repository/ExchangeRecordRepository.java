@@ -1,5 +1,6 @@
 package mdse.jtexrer.model.repository;
 
+import lombok.Synchronized;
 import mdse.jtexrer.model.exchange.ExchangeRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

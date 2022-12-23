@@ -2,6 +2,7 @@ package mdse.jtexrer.service;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import mdse.jtexrer.model.exceptions.IncorrectCurrencyCodeException;
 import mdse.jtexrer.model.exceptions.IncorrectDateException;
@@ -10,6 +11,7 @@ import mdse.jtexrer.model.exchange.ExchangeRecord;
 import mdse.jtexrer.model.repository.ExchangeBulkDataRepository;
 import mdse.jtexrer.model.repository.ExchangeRecordRepository;
 import mdse.jtexrer.model.spread.SpreadProvider;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,7 +33,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
     private ExchangeRecordRepository recordRepository;
 
     @Override
-    public Double evaluateExchange(String fromCode, String toCode, LocalDate date) {
+    public BigDecimal evaluateExchange(String fromCode, String toCode, LocalDate date) {
         var metadata = getForAppropriateDate(date);
         log.info("Retrieving buffered exchange data from {} to {} with base currency {} for date {}",
                 fromCode, toCode, metadata.getBaseCurrencyCode(), metadata.getDate());
@@ -42,7 +44,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
         var toRate = getRate(toCode, rates);
         log.info("Retrieved buffered rates: from:{}={}, to:{}={}]", fromCode, fromRate, toCode, toRate);
         var spread = spreadProvider.spreadFor(fromCode, toCode, metadata.getBaseCurrencyCode());
-        return calculateExchange(fromRate, toRate, spread).doubleValue();
+        return calculateExchange(fromRate, toRate, spread);
     }
 
     private BigDecimal calculateExchange(BigDecimal fromRate, BigDecimal toRate, BigDecimal spread) {
@@ -56,6 +58,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
         return rates;
     }
 
+    @Synchronized
     private List<ExchangeRecord> getBufferedRatesAndIterateReads(String codeFrom, String codeTo, LocalDate date) {
         var fromId = compositeIdOf(codeFrom, date);
         var toId = compositeIdOf(codeTo, date);

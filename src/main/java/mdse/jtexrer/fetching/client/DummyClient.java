@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@Profile("dummy")
+@Profile("offline")
 @AllArgsConstructor
 public class DummyClient implements RestClient {
 
