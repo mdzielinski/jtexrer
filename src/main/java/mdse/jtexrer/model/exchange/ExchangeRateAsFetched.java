@@ -34,15 +34,15 @@ public class ExchangeRateAsFetched {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hashCode(date, timestamp, baseCurrencyCode, exchangeRecords);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ExchangeRateAsFetched that)) return false;
         return timestamp == that.timestamp && Objects.equal(date, that.date) && Objects.equal(baseCurrencyCode, that.baseCurrencyCode) && Objects.equal(exchangeRecords, that.exchangeRecords);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(date, timestamp, baseCurrencyCode, exchangeRecords);
     }
 
     @Override

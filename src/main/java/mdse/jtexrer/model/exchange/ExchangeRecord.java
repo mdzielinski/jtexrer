@@ -19,18 +19,24 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 public class ExchangeRecord implements Serializable {
+    @EmbeddedId
+    private CompositeId compositeId = new CompositeId();
+    private Double exchangeRate;
+    @Column(updatable = false, columnDefinition = "int default 0")
+    private Integer fetchCounter = 0;
     public ExchangeRecord(LocalDate date, String currencyCode, Double exchangeRate) {
         this.compositeId.date = date;
         this.compositeId.currencyCode = currencyCode;
         this.exchangeRate = exchangeRate;
     }
 
-
-    @EmbeddedId
-    private CompositeId compositeId = new CompositeId();
-    private Double exchangeRate;
-    @Column(updatable = false, columnDefinition = "int default 0")
-    private Integer fetchCounter = 0;
+    public static ExchangeRecord newWithIteratedReads(ExchangeRecord record) {
+        var iterated = new ExchangeRecord();
+        iterated.setFetchCounter(record.getFetchCounter() + 1);
+        iterated.setCompositeId(record.getCompositeId());
+        iterated.setExchangeRate(record.getExchangeRate());
+        return iterated;
+    }
 
     public String getCode() {
         return this.compositeId.getCurrencyCode();
@@ -41,23 +47,15 @@ public class ExchangeRecord implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ExchangeRecord that)) return false;
-        return Objects.equal(compositeId, that.compositeId) && Objects.equal(exchangeRate, that.exchangeRate) && Objects.equal(fetchCounter, that.fetchCounter);
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hashCode(compositeId, exchangeRate, fetchCounter);
     }
 
-    public static ExchangeRecord newWithIteratedReads(ExchangeRecord record) {
-        var iterated = new ExchangeRecord();
-        iterated.setFetchCounter(record.getFetchCounter() + 1);
-        iterated.setCompositeId(record.getCompositeId());
-        iterated.setExchangeRate(record.getExchangeRate());
-        return iterated;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ExchangeRecord that)) return false;
+        return Objects.equal(compositeId, that.compositeId) && Objects.equal(exchangeRate, that.exchangeRate) && Objects.equal(fetchCounter, that.fetchCounter);
     }
 
     @Data
@@ -77,15 +75,15 @@ public class ExchangeRecord implements Serializable {
         }
 
         @Override
+        public int hashCode() {
+            return Objects.hashCode(date, currencyCode);
+        }
+
+        @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof CompositeId that)) return false;
             return Objects.equal(date, that.date) && Objects.equal(currencyCode, that.currencyCode);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(date, currencyCode);
         }
     }
 }

@@ -2,6 +2,7 @@ package mdse.jtexrer.fetching;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import mdse.jtexrer.fetching.client.RestClient;
 import mdse.jtexrer.model.exchange.ExchangeRateAsFetched;
@@ -34,6 +35,7 @@ public class ScheduledAsyncFetcher implements DataFetcher {
     }
 
     @Override
+    @Synchronized
     public void fetchExchangeData() {
         save(deserialize(get(API_URL, API_KEY_NAME, API_KEY_VALUE, client)));
     }

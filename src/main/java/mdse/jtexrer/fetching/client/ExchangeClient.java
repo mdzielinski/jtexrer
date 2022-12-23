@@ -20,6 +20,16 @@ import static java.util.Objects.requireNonNull;
 @AllArgsConstructor
 public class ExchangeClient implements RestClient {
 
+    private static HttpEntity<Object> getRequestWithHeader(String apiKeyName, String apiKeyValue) {
+        var httpHeaders = new HttpHeaders();
+        httpHeaders.add(apiKeyName, apiKeyValue);
+        return new HttpEntity<>(httpHeaders);
+    }
+
+    private static String getMasked(String string) {
+        return string.substring(string.length() / 3).concat("*");
+    }
+
     @Override
     public ResponseEntity<JsonNode> sendGet(String url, String apiKeyName, String apiKeyValue) {
         HttpEntity<Object> requestEntity = getRequestWithHeader(apiKeyName, apiKeyValue);
@@ -36,15 +46,5 @@ public class ExchangeClient implements RestClient {
             //todo handling when e was thrown is needed.
             throw e;
         }
-    }
-
-    private static HttpEntity<Object> getRequestWithHeader(String apiKeyName, String apiKeyValue) {
-        var httpHeaders = new HttpHeaders();
-        httpHeaders.add(apiKeyName, apiKeyValue);
-        return new HttpEntity<>(httpHeaders);
-    }
-
-    private static String getMasked(String string) {
-        return string.substring(string.length() / 3).concat("*");
     }
 }

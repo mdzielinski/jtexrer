@@ -11,7 +11,6 @@ import mdse.jtexrer.model.exchange.ExchangeRecord;
 import mdse.jtexrer.model.repository.ExchangeBulkDataRepository;
 import mdse.jtexrer.model.repository.ExchangeRecordRepository;
 import mdse.jtexrer.model.spread.SpreadProvider;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,12 +31,21 @@ public class BasicEvaluator implements ExchangeEvaluator {
     private ExchangeBulkDataRepository exchangeBulkDataRepository;
     private ExchangeRecordRepository recordRepository;
 
+    @SneakyThrows
+    private static BigDecimal getRate(String code, List<ExchangeRecord> records) {
+        return records
+                .stream()
+                .filter(o -> code.equals(o.getCode()))
+                .findFirst().orElseThrow(() -> new IncorrectCurrencyCodeException(code))
+                .getRate();
+    }
+
     @Override
     @Synchronized
     public BigDecimal evaluateExchange(String fromCode, String toCode, LocalDate date) {
         var metadata = getForAppropriateDate(date);
-        log.info("Retrieving buffered exchange data from {} to {} with base currency {} for date {}",
-                fromCode, toCode, metadata.getBaseCurrencyCode(), metadata.getDate());
+        log.info("Retrieving buffered exchange data from {} to {} with for date {}. Base currency {}",
+                fromCode, toCode, metadata.getDate(), metadata.getBaseCurrencyCode());
 
         var rates = getBufferedRatesAndIterateReads(fromCode, toCode, metadata.getDate());
 
@@ -55,8 +63,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
     }
 
     private ExchangeRateAsFetched getForAppropriateDate(LocalDate date) {
-        var rates = isNull(date) ? getForLastDate() : getForDate(date);
-        return rates;
+        return isNull(date) ? getForLastDate() : getForDate(date);
     }
 
     private List<ExchangeRecord> getBufferedRatesAndIterateReads(String codeFrom, String codeTo, LocalDate date) {
@@ -71,15 +78,6 @@ public class BasicEvaluator implements ExchangeEvaluator {
 
         iteratedRecords.forEach(r -> recordRepository.updateCounter(r.getFetchCounter(), r.getCode(), date));
         return iteratedRecords;
-    }
-
-    @SneakyThrows
-    private static BigDecimal getRate(String code, List<ExchangeRecord> records) {
-        return records
-                .stream()
-                .filter(o -> code.equals(o.getCode()))
-                .findFirst().orElseThrow(() -> new IncorrectCurrencyCodeException(code))
-                .getRate();
     }
 
     @SneakyThrows

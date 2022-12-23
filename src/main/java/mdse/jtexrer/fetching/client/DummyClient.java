@@ -1,9 +1,9 @@
 package mdse.jtexrer.fetching.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -16,24 +16,12 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DummyClient implements RestClient {
 
-    @Override
-    public ResponseEntity<JsonNode> sendGet(String url, String apiKeyName, String apiKeyValue) {
-
-        log.info("DummyClient generates dummy exchange rates!");
-        return new ResponseEntity<>(generate(), HttpStatus.OK);
-    }
-
+    @SneakyThrows
     private static JsonNode generate() {
-        JsonNode responseBody;
-        try {
-            responseBody = new ObjectMapper().readTree(echangeRatesJson());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return responseBody;
+        return new ObjectMapper().readTree(provideFixedJsonResponse());
     }
 
-    private static String echangeRatesJson() {
+    private static String provideFixedJsonResponse() {
         return """
                 {
                                    "success": true,
@@ -214,6 +202,13 @@ public class DummyClient implements RestClient {
                                    }
                                }
                 """;
+    }
+
+    @Override
+    public ResponseEntity<JsonNode> sendGet(String url, String apiKeyName, String apiKeyValue) {
+
+        log.info("DummyClient generates dummy exchange rates!");
+        return new ResponseEntity<>(generate(), HttpStatus.OK);
     }
 
 }

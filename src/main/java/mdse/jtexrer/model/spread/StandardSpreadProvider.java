@@ -13,16 +13,6 @@ import static java.math.BigDecimal.valueOf;
 @Profile("standardspread")
 public class StandardSpreadProvider implements SpreadProvider {
 
-    @Override
-    public BigDecimal spreadFor(String fromCurrencyCode, String toCurrencyCode, String baseCurrencyCode) {
-        double fromSpread = getSpread(fromCurrencyCode, baseCurrencyCode);
-        double toSpread = getSpread(toCurrencyCode, baseCurrencyCode);
-        double effectiveSpread = Double.max(fromSpread, toSpread);
-        log.info("Spread: {}% (max from: [{}:{}%, {}:{}%])",
-                effectiveSpread, fromCurrencyCode, fromSpread, toCurrencyCode, toSpread);
-        return valueOf(effectiveSpread);
-    }
-
     private static double getSpread(String currencyCode, String baseCurrencyCode) {
         if (currencyCode.equals(baseCurrencyCode)) return 0;
         return switch (currencyCode) {
@@ -31,5 +21,15 @@ public class StandardSpreadProvider implements SpreadProvider {
             case "RUB", "CNY", "ZAR" -> 6.00;
             default -> 2.75;
         };
+    }
+
+    @Override
+    public BigDecimal spreadFor(String fromCurrencyCode, String toCurrencyCode, String baseCurrencyCode) {
+        double fromSpread = getSpread(fromCurrencyCode, baseCurrencyCode);
+        double toSpread = getSpread(toCurrencyCode, baseCurrencyCode);
+        double effectiveSpread = Double.max(fromSpread, toSpread);
+        log.info("Spread: {}% (max from: [{}:{}%, {}:{}%])",
+                effectiveSpread, fromCurrencyCode, fromSpread, toCurrencyCode, toSpread);
+        return valueOf(effectiveSpread);
     }
 }
