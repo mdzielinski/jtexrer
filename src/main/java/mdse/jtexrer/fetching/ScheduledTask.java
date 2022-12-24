@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ScheduledTask {
 
-    private final ExchangeFetcher fetcher;
+    private final CurrencyExchangeFetcher fetcher;
 
     @Async
     @Scheduled(cron = "${schedule}", zone = "GMT")

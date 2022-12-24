@@ -10,13 +10,16 @@ spring:
       load-on-startup: 1
   jpa:
     show-sql: false
+    open-in-view: true
     hibernate:
       ddl-auto: update
 logging:
   level:
     .: warning
     mdse.jtexrer: debug
-
+---
+spring.profiles.group.production: online,postgresInDocker,cron5pastmidnight,standardspread
+spring.profiles.group.development: offline,h2InMemory,cronevery1min,standardspread
 ---
 spring.config.activate.on-profile: postgresInDocker
 spring:
@@ -33,7 +36,7 @@ spring:
           textColumnType: TEXT
         contexts: nonprod
 ---
-spring.config.activate.on-profile: h2InMemory
+spring.config.activate.on-profile: h2InFile
 spring:
   config:
       jpa:
@@ -52,14 +55,19 @@ spring:
         console:
           enabled: true
 ---
-spring.config.activate.on-profile: offline
-exchange_api_url: "dummy"
-exchange_api_key_name: "dummy"
-exchange_api_key_value: "dummy"
+spring.config.activate.on-profile: online
+currency_exchange_api_url: https://api.apilayer.com/fixer/latest
+currency_exchange_api_key_name: apikey
+currency_exchange_api_key_value: cNjdRJ25uzrbKd88XRsOX1T6zYaTgAO1
 ---
-spring.config.activate.on-profile: every1min
+spring.config.activate.on-profile: offline
+currency_exchange_api_url: ""
+currency_exchange_api_key_name: ""
+currency_exchange_api_key_value: ""
+---
+spring.config.activate.on-profile: cronevery1min
 schedule: 01 * * * * *
 ---
-spring.config.activate.on-profile: 5pastmidnight
+spring.config.activate.on-profile: cron5pastmidnight
 schedule: 00 05 00 * * *
 ---

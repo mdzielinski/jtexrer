@@ -15,15 +15,15 @@ import static mdse.jtexrer.model.exchange.util.ExchangeRateDeserializeUtil.deser
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ExchangeFetcher implements DataFetcher {
+public class CurrencyExchangeFetcher implements DataFetcher {
     private final ExchangeBulkDataRepository exchangeBulkDataRepository;
     private final RestClient client;
 
-    @Value("${exchange_api_url}")
+    @Value("${currency_exchange_api_url}")
     private String API_URL;
-    @Value("${exchange_api_key_name}")
+    @Value("${currency_exchange_api_key_name}")
     private String API_KEY_NAME;
-    @Value("${exchange_api_key_value}")
+    @Value("${currency_exchange_api_key_value}")
     private String API_KEY_VALUE;
 
     @Override

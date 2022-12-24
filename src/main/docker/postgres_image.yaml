@@ -3,7 +3,7 @@ services:
   database:
     image: library/postgres:latest
     volumes:
-      ./db
+      - ./
     ports:
       - 5454:5432
     expose:
