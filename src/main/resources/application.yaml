@@ -1,10 +1,8 @@
 spring:
-  profiles:
-    active: h2
   application:
     name: jtexrer
   server:
-    port: 8085
+    port: 8080
   mvc:
     servlet:
       load-on-startup: 1
@@ -19,7 +17,7 @@ logging:
     mdse.jtexrer: debug
 ---
 spring.profiles.group.production: online,postgresInDocker,cron5pastmidnight,standardspread
-spring.profiles.group.development: offline,h2InMemory,cronevery1min,standardspread
+spring.profiles.group.development: offline,h2infile,cronevery1min,standardspread
 ---
 spring.config.activate.on-profile: postgresInDocker
 spring:
@@ -36,7 +34,7 @@ spring:
           textColumnType: TEXT
         contexts: nonprod
 ---
-spring.config.activate.on-profile: h2InFile
+spring.config.activate.on-profile: h2infile
 spring:
   config:
       jpa:
@@ -50,7 +48,6 @@ spring:
       liquibase:
         parameters:
           textColumnType: VARCHAR(250)
-        contexts: nonprod
       h2:
         console:
           enabled: true

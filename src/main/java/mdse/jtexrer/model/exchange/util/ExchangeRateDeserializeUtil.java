@@ -15,7 +15,6 @@ import static java.util.Collections.synchronizedList;
 @Slf4j
 public class ExchangeRateDeserializeUtil {
 
-
     public static ExchangeRateAsFetched deserialize(JsonNode responseBody) {
         var timestamp = parseTimestamp(responseBody);
         var base = parseCurrencyCode(responseBody);
@@ -26,24 +25,24 @@ public class ExchangeRateDeserializeUtil {
 
     private static long parseTimestamp(JsonNode response) {
         long timestamp = response.get("timestamp").asLong();
-        log.debug("parsed timestamp: {}", timestamp);
+        log.debug("Parsed timestamp: {}.", timestamp);
         return timestamp;
     }
 
     private static String parseCurrencyCode(JsonNode response) {
         String base = response.get("base").asText();
-        log.debug("parsed base: {}", base);
+        log.debug("Parsed base: {}.", base);
         return base;
     }
 
     private static LocalDate parseIsoDate(JsonNode response) {
         LocalDate date = LocalDate.parse(response.get("date").asText(), DateTimeFormatter.ISO_LOCAL_DATE);
-        log.debug("parsed date: {}", date);
+        log.debug("Parsed date: {}.", date);
         return date;
     }
 
     private static List<ExchangeRecord> parseRates(JsonNode responseBody, LocalDate date) {
-        var rawRates = responseBody.get("rates");
+        JsonNode rawRates = responseBody.get("rates");
         var parsedRates = synchronizedList(new ArrayList<ExchangeRecord>());
         rawRates.fields()
                 .forEachRemaining(
@@ -57,7 +56,7 @@ public class ExchangeRateDeserializeUtil {
                             parsedRates.add(record);
                         });
 
-        log.debug("parsed rates: {}", parsedRates);
+        log.debug("Parsed rates: {}.", parsedRates);
         return parsedRates;
     }
 }

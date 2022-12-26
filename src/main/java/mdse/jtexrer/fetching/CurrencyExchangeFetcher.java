@@ -1,8 +1,8 @@
 package mdse.jtexrer.fetching;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import mdse.jtexrer.fetching.client.RestClient;
 import mdse.jtexrer.model.exchange.ExchangeRateAsFetched;
@@ -27,7 +27,7 @@ public class CurrencyExchangeFetcher implements DataFetcher {
     private String API_KEY_VALUE;
 
     @Override
-    @Synchronized
+    @Transactional
     public void fetchExchangeData() {
         save(deserialize(get(API_URL, API_KEY_NAME, API_KEY_VALUE, client)));
     }

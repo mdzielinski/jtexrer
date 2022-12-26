@@ -1,11 +1,12 @@
 package mdse.jtexrer.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import mdse.jtexrer.model.exceptions.IncorrectCurrencyCodeException;
 import mdse.jtexrer.model.exceptions.IncorrectDateException;
+import mdse.jtexrer.model.exceptions.LatestDataNotFundException;
 import mdse.jtexrer.model.exchange.ExchangeRateAsFetched;
 import mdse.jtexrer.model.exchange.ExchangeRecord;
 import mdse.jtexrer.model.repository.ExchangeBulkDataRepository;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.Objects.isNull;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static mdse.jtexrer.model.exchange.ExchangeRecord.CompositeId.compositeIdOf;
 
@@ -41,9 +43,9 @@ public class BasicEvaluator implements ExchangeEvaluator {
     }
 
     @Override
-    @Synchronized
+    @Transactional
     public BigDecimal evaluateExchange(String fromCode, String toCode, LocalDate date) {
-        var metadata = getForAppropriateDate(date);
+        var metadata = isNull(date) ? getForLastDate() : getForDate(date);
         log.info("Retrieving buffered exchange data from {} to {} with for date {}. Base currency {}",
                 fromCode, toCode, metadata.getDate(), metadata.getBaseCurrencyCode());
 
@@ -62,10 +64,6 @@ public class BasicEvaluator implements ExchangeEvaluator {
         return rateProportion.multiply(spreadCorrection);
     }
 
-    private ExchangeRateAsFetched getForAppropriateDate(LocalDate date) {
-        return isNull(date) ? getForLastDate() : getForDate(date);
-    }
-
     private List<ExchangeRecord> getBufferedRatesAndIterateReads(String codeFrom, String codeTo, LocalDate date) {
         var fromId = compositeIdOf(codeFrom, date);
         var toId = compositeIdOf(codeTo, date);
@@ -82,16 +80,20 @@ public class BasicEvaluator implements ExchangeEvaluator {
 
     @SneakyThrows
     private ExchangeRateAsFetched getForDate(LocalDate date) {
+        log.debug("Obtaining exchange data for date: {}.", date);
         var firstByOrderByDate = exchangeBulkDataRepository
                 .findByDate(date)
                 .orElseThrow(() -> new IncorrectDateException(date));
-        log.info("Obtained exchange data for date: {}", firstByOrderByDate.getDate());
+        log.info("Obtained exchange data for date: {}.", firstByOrderByDate.getDate());
         return firstByOrderByDate;
     }
 
+    @SneakyThrows
     private ExchangeRateAsFetched getForLastDate() {
-        var firstByOrderByDate = exchangeBulkDataRepository.findFirstByOrderByDateDesc();
-        log.info("Obtained exchange data for latest date: {}", firstByOrderByDate.getDate());
+        log.debug("Obtaining exchange data for latest date.");
+        var firstByOrderByDate = ofNullable(exchangeBulkDataRepository.findFirstByOrderByDateDesc())
+                .orElseThrow(LatestDataNotFundException::new);
+        log.info("Obtained exchange data for latest date: {}.", firstByOrderByDate.getDate());
         return firstByOrderByDate;
     }
 }

@@ -16,12 +16,19 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DummyClient implements RestClient {
 
-    @SneakyThrows
-    private static JsonNode generate() {
-        return new ObjectMapper().readTree(provideFixedJsonResponse());
+    @Override
+    public ResponseEntity<JsonNode> sendGet(String url, String apiKeyName, String apiKeyValue) {
+
+        log.info("DummyClient generates dummy exchange rates!");
+        return new ResponseEntity<>(parse(provideJsonBody()), HttpStatus.OK);
     }
 
-    private static String provideFixedJsonResponse() {
+    @SneakyThrows
+    private static JsonNode parse(String json) {
+        return new ObjectMapper().readTree(json);
+    }
+
+    private static String provideJsonBody() {
         return """
                 {
                                    "success": true,
@@ -202,13 +209,6 @@ public class DummyClient implements RestClient {
                                    }
                                }
                 """;
-    }
-
-    @Override
-    public ResponseEntity<JsonNode> sendGet(String url, String apiKeyName, String apiKeyValue) {
-
-        log.info("DummyClient generates dummy exchange rates!");
-        return new ResponseEntity<>(generate(), HttpStatus.OK);
     }
 
 }
