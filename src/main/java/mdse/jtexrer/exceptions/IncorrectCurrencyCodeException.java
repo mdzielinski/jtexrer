@@ -1,4 +1,4 @@
-package mdse.jtexrer.model.exceptions;
+package mdse.jtexrer.exceptions;
 
 public class IncorrectCurrencyCodeException extends Exception {
     public IncorrectCurrencyCodeException(String currencyCode) {

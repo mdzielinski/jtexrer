@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
-import mdse.jtexrer.fetching.DataFetcher;
+import mdse.jtexrer.fetcher.DataFetcher;
 import mdse.jtexrer.model.exchange.ExchangeResponseBody;
 import mdse.jtexrer.service.ExchangeEvaluator;
 import org.springframework.validation.annotation.Validated;

@@ -1,4 +1,4 @@
-package mdse.jtexrer.model.spread;
+package mdse.jtexrer.service.spread;
 
 import java.math.BigDecimal;
 

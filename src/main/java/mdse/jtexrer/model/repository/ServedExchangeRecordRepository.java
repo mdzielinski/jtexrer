@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface ExchangeRecordRepository extends JpaRepository<ExchangeRecord, Long> {
+public interface ServedExchangeRecordRepository extends JpaRepository<ExchangeRecord, Long> {
 
     List<ExchangeRecord> findByCompositeIdIn(List<ExchangeRecord.CompositeId> ids);
 

@@ -1,4 +1,4 @@
-package mdse.jtexrer.fetching.client;
+package mdse.jtexrer.fetcher.cient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;

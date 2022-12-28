@@ -16,23 +16,23 @@ logging:
     .: warning
     mdse.jtexrer: debug
 ---
-spring.profiles.group.production: online,postgresInDocker,cron5pastmidnight,standardspread
+spring.profiles.group.production: online,h2infile,cron5pastmidnight,standardspread
 spring.profiles.group.development: offline,h2infile,cronevery1min,standardspread
 ---
-spring.config.activate.on-profile: postgresInDocker
-spring:
-  config:
-      jpa:
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
-      datasource:
-        url: jdbc:postgresql://localhost:5454/jtexer?current_schema=public
-        driverClassName: org.postgresql.Driver
-        username: sa
-        password: admin
-      liquibase:
-        parameters:
-          textColumnType: TEXT
-        contexts: nonprod
+#spring.config.activate.on-profile: postgresInDocker
+#spring:
+#  config:
+#      jpa:
+#        database-platform: org.hibernate.dialect.PostgreSQLDialect
+#      datasource:
+#        url: jdbc:postgresql://localhost:5454/jtexer?current_schema=public
+#        driverClassName: org.postgresql.Driver
+#        username: sa
+#        password: admin
+#      liquibase:
+#        parameters:
+#          textColumnType: TEXT
+#        contexts: nonprod
 ---
 spring.config.activate.on-profile: h2infile
 spring:
@@ -63,8 +63,8 @@ currency_exchange_api_key_name: ""
 currency_exchange_api_key_value: ""
 ---
 spring.config.activate.on-profile: cronevery1min
-schedule: 01 * * * * *
+fetch_schedule: 01 * * * * *
 ---
 spring.config.activate.on-profile: cron5pastmidnight
-schedule: 00 05 00 * * *
+fetch_schedule: 00 05 00 * * *
 ---

@@ -4,14 +4,14 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import mdse.jtexrer.model.exceptions.IncorrectCurrencyCodeException;
-import mdse.jtexrer.model.exceptions.IncorrectDateException;
-import mdse.jtexrer.model.exceptions.LatestDataNotFundException;
+import mdse.jtexrer.exceptions.IncorrectCurrencyCodeException;
+import mdse.jtexrer.exceptions.IncorrectDateException;
+import mdse.jtexrer.exceptions.LatestDataNotFundException;
 import mdse.jtexrer.model.exchange.ExchangeRateAsFetched;
 import mdse.jtexrer.model.exchange.ExchangeRecord;
-import mdse.jtexrer.model.repository.ExchangeBulkDataRepository;
-import mdse.jtexrer.model.repository.ExchangeRecordRepository;
-import mdse.jtexrer.model.spread.SpreadProvider;
+import mdse.jtexrer.model.repository.FetchedExchangeDataRepository;
+import mdse.jtexrer.model.repository.ServedExchangeRecordRepository;
+import mdse.jtexrer.service.spread.SpreadProvider;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,8 +30,8 @@ import static mdse.jtexrer.model.exchange.ExchangeRecord.CompositeId.compositeId
 public class BasicEvaluator implements ExchangeEvaluator {
 
     private SpreadProvider spreadProvider;
-    private ExchangeBulkDataRepository exchangeBulkDataRepository;
-    private ExchangeRecordRepository recordRepository;
+    private FetchedExchangeDataRepository fetchedExchangeDataRepository;
+    private ServedExchangeRecordRepository recordRepository;
 
     @SneakyThrows
     private static BigDecimal getRate(String code, List<ExchangeRecord> records) {
@@ -81,7 +81,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
     @SneakyThrows
     private ExchangeRateAsFetched getForDate(LocalDate date) {
         log.debug("Obtaining exchange data for date: {}.", date);
-        var firstByOrderByDate = exchangeBulkDataRepository
+        var firstByOrderByDate = fetchedExchangeDataRepository
                 .findByDate(date)
                 .orElseThrow(() -> new IncorrectDateException(date));
         log.info("Obtained exchange data for date: {}.", firstByOrderByDate.getDate());
@@ -91,7 +91,7 @@ public class BasicEvaluator implements ExchangeEvaluator {
     @SneakyThrows
     private ExchangeRateAsFetched getForLastDate() {
         log.debug("Obtaining exchange data for latest date.");
-        var firstByOrderByDate = ofNullable(exchangeBulkDataRepository.findFirstByOrderByDateDesc())
+        var firstByOrderByDate = ofNullable(fetchedExchangeDataRepository.findFirstByOrderByDateDesc())
                 .orElseThrow(LatestDataNotFundException::new);
         log.info("Obtained exchange data for latest date: {}.", firstByOrderByDate.getDate());
         return firstByOrderByDate;

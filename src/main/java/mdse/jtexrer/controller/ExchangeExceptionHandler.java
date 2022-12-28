@@ -2,8 +2,8 @@ package mdse.jtexrer.controller;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import mdse.jtexrer.model.exceptions.IncorrectCurrencyCodeException;
-import mdse.jtexrer.model.exceptions.IncorrectDateException;
+import mdse.jtexrer.exceptions.IncorrectCurrencyCodeException;
+import mdse.jtexrer.exceptions.IncorrectDateException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class ExchangeExceptionHandler {
 
     @ExceptionHandler(value = {IncorrectDateException.class, IncorrectCurrencyCodeException.class, ConstraintViolationException.class})
     public ResponseEntity<String> handleIncorrectParameters(Exception e) {

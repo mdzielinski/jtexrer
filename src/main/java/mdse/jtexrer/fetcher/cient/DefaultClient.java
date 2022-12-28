@@ -1,4 +1,4 @@
-package mdse.jtexrer.fetching.client;
+package mdse.jtexrer.fetcher.cient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import static java.util.Objects.requireNonNull;
 @Service
 @Profile({"default", "online"})
 @AllArgsConstructor
-public class ExchangeClient implements RestClient {
+public class DefaultClient implements RestClient {
 
     private static HttpEntity<Object> getRequestWithHeader(String apiKeyName, String apiKeyValue) {
         var httpHeaders = new HttpHeaders();

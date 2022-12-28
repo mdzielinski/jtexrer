@@ -1,4 +1,4 @@
-package mdse.jtexrer.fetching;
+package mdse.jtexrer.fetcher;
 
 
 public interface DataFetcher {

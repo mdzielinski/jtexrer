@@ -1,4 +1,4 @@
-package mdse.jtexrer.fetching;
+package mdse.jtexrer.fetcher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ScheduledTask {
 
-    private final CurrencyExchangeFetcher fetcher;
+    private final CurrencyDataFetcher fetcher;
 
     @Async
-    @Scheduled(cron = "${schedule}", zone = "GMT")
+    @Scheduled(cron = "${fetchschedule}", zone = "GMT")
     public void asyncFetch() {
         log.info("Starting scheduled fetch task.");
         fetcher.fetchExchangeData();

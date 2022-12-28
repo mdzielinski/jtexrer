@@ -1,4 +1,4 @@
-package mdse.jtexrer.model.exceptions;
+package mdse.jtexrer.exceptions;
 
 import java.time.LocalDate;
 

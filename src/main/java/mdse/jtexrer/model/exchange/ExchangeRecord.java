@@ -22,7 +22,7 @@ public class ExchangeRecord implements Serializable {
     @EmbeddedId
     private CompositeId compositeId = new CompositeId();
     private Double exchangeRate;
-    @Column(updatable = false, columnDefinition = "int default 0")
+    @Column(name = "fetch_counter", updatable = false, columnDefinition = "int default 0")
     private Integer fetchCounter = 0;
     public ExchangeRecord(LocalDate date, String currencyCode, Double exchangeRate) {
         this.compositeId.date = date;
@@ -63,8 +63,10 @@ public class ExchangeRecord implements Serializable {
     @AllArgsConstructor
     public static class CompositeId implements Serializable {
 
+        @Column(name = "date")
         protected LocalDate date;
 
+        @Column(name = "currency_code")
         protected String currencyCode;
 
         public CompositeId() {

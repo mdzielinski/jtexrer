@@ -1,4 +1,4 @@
-package mdse.jtexrer.model.spread;
+package mdse.jtexrer.service.spread;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
