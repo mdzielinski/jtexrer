@@ -19,38 +19,27 @@ logging:
 spring.profiles.group.production: online,h2infile,cron5pastmidnight,standardspread
 spring.profiles.group.development: offline,h2infile,cronevery1min,standardspread
 ---
-#spring.config.activate.on-profile: postgresInDocker
-#spring:
-#  config:
-#      jpa:
-#        database-platform: org.hibernate.dialect.PostgreSQLDialect
-#      datasource:
-#        url: jdbc:postgresql://localhost:5454/jtexer?current_schema=public
-#        driverClassName: org.postgresql.Driver
-#        username: sa
-#        password: admin
-#      liquibase:
-#        parameters:
-#          textColumnType: TEXT
-#        contexts: nonprod
+spring.config.activate.on-profile: postgresInDocker
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5454/jtexer?current_schema=public
+    driverClassName: org.postgresql.Driver
+    username: sa
+    password: admin
 ---
 spring.config.activate.on-profile: h2infile
 spring:
-  config:
-      jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
-      datasource:
-        platform: h2
-        url: jdbc:h2:file:./src/main/resources/db/h2
-        driverClassName: org.h2.Driver
-        username: sa
-        password: admin
-      liquibase:
-        parameters:
-          textColumnType: VARCHAR(250)
-      h2:
-        console:
-          enabled: true
+  datasource:
+    platform: h2
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./src/main/resources/db/h2
+    username: sa
+    password: admin
+  h2:
+    console:
+      enabled: true
 ---
 spring.config.activate.on-profile: online
 currency_exchange_api_url: https://api.apilayer.com/fixer/latest

@@ -39,10 +39,12 @@
      - `online` - enables http client fetching data form `fixer.io`.
    - Scheduling strategy:  
      - `cron5pastmidnight` - defines scheduling of data fetch once a day, 5 past midnight.
-     - `standardspread` - spreads as defined by requirements.
+     - `cronevery1min` - defines scheduling of data fetch once a minute.
 
 ### Useful links
-- access H2 console `http://localhost:8085/h2-console/` user:`sa`, password:`admin`
-- access Swagger UI `http://localhost:8085/swagger-ui/index.html`
+- access H2 console `http://localhost:8080/h2-console/` user:`sa`, password:`admin`
+- access Swagger UI `http://localhost:8080/swagger-ui/index.html`
 
+## note:
+- h2 when enabled will store database in file. Remove ot 
 Have fun!
